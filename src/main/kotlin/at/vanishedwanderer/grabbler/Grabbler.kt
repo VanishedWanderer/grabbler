@@ -6,7 +6,7 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import kotlin.properties.Delegates
 
-open class Grabbler<T>(
+open class Grabbler<T> internal constructor(
         val statement: PreparedStatement,
         val mapper: ResultSet.() -> T
 ) {
@@ -36,7 +36,7 @@ open class Grabbler<T>(
 /**
  * A subtype of Grabbler, created by the [Grabbler.parametrize] method.
  */
-class ParametrizedGrabbler<T, U>(
+class ParametrizedGrabbler<T, U> internal constructor(
     grabbler: Grabbler<T>,
     val parameters: () -> U,
     val parameterApplicator: U.(PreparedStatement) -> Unit
