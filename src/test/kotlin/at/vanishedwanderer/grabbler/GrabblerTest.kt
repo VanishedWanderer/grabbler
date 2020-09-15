@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.postgresql.util.PSQLException
 import org.testcontainers.junit.jupiter.Testcontainers
+import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 import java.sql.Connection
 import java.sql.DriverManager
@@ -452,5 +453,24 @@ class GrabblerTest {
 
         //Assert
         assertThat(result, `is`(equalTo(listOf(data[4]))))
+    }
+
+    @Test
+    fun grabbler06_configuration_byId_emptyIdField_throws() {
+        //Arrange
+        data class Test(
+                val id: Int,
+                val text: String
+        )
+
+        val configuration = GrabblerConfiguration<Test>("SELECT id, text from test") {
+            Test(getInt(1), getString(2))
+        }
+
+        //Actsert
+        assertThrows<IllegalArgumentException> {
+            configuration.createByIdGrabbler<Int>(connection, " ")
+        }
+
     }
 }

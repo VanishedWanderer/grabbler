@@ -89,6 +89,7 @@ class GrabblerConfiguration<T>(
     }
 
     fun <IdType: Number> createByIdGrabbler(connection: Connection, idFieldName: String): ParametrizedGrabbler<T, ByIdGrabblerParameters<IdType>> {
+        if(idFieldName.isBlank()) throw IllegalArgumentException("The name of the id-field (idFieldName) cannot be empty when creating an ByIdFieldGrabbler")
         return createGrabbler(connection, "where $idFieldName = ?").parametrize({
             ByIdGrabblerParameters()
         }) {
