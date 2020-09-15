@@ -4,7 +4,6 @@ import org.intellij.lang.annotations.Language
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import kotlin.properties.Delegates
 
 open class Grabbler<T> internal constructor(
         val statement: PreparedStatement,
@@ -76,13 +75,14 @@ class ByIdGrabblerParameters<IdType: Number>{
  * @param mapper
  *   A lambda, mapping the expected [ResultSet] of the [PreparedStatement] to a class. As the mapping from [ResultSet]
  *   to a class requires knowledge of the exact position of the fields, this must be defined in the here, as
- *   one can rely on the staticness of the [queryPrefix]
- *
+ *   one can rely on the staticity of the [queryPrefix]
+ * @param T
+ *   Specifies the return type of the Grabbler
  */
 class GrabblerConfiguration<T>(
         @Language("PostgreSQL")
-        val queryPrefix: String,
-        val mapper: ResultSet.() -> T
+        private val queryPrefix: String,
+        private val mapper: ResultSet.() -> T
 ){
     fun createGrabbler(connection: Connection, querySuffix: String): Grabbler<T> {
         return connection.grabbler("$queryPrefix $querySuffix", mapper)
