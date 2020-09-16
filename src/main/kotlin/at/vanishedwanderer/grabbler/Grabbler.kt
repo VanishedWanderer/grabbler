@@ -103,7 +103,7 @@ class GrabblerConfiguration<T>(
  * columns, think of using a [GrabblerConfiguration] instead.
  */
 fun <T> Connection.grabbler(@Language("PostgreSQL") statement: String, mapper: ResultSet.() -> T): Grabbler<T> {
-    println("Preparing Statement: $statement")
+    //println("Preparing Statement: $statement")
     val stmt = this.prepareStatement(statement)
     return Grabbler(stmt, mapper)
 }
